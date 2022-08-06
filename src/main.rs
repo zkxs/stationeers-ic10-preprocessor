@@ -6,6 +6,7 @@ use lazy_static::lazy_static;
 use itertools::Itertools;
 
 const YIELD_INSTRUCTION: &str = "yield";
+const ZERO: &str = "0";
 
 lazy_static! {
     static ref LABEL_REGEX: Regex = Regex::new(r"^(\w+):").unwrap();
@@ -47,7 +48,21 @@ fn process_file(filename: &str) -> io::Result<()> {
             let previous_was_yield: bool = program.last()
                 .map(|last| last == YIELD_INSTRUCTION)
                 .unwrap_or(false);
-            if previous_was_yield {
+
+            let mut label_is_zero = false;
+            for l in labels.iter() {
+                if l.line != ZERO {
+                    // if we find a nonzero line, then our label cannot have been zero and we can stop iterating
+                    break;
+                } else if l.label == label {
+                    // if we find our label and we haven't found a nonzero line, then our label must be zero
+                    label_is_zero = true;
+                    break;
+                }
+                // finally, if we don't find the label at all then it must come after this line, and therefore be zero
+            }
+
+            if previous_was_yield && !label_is_zero {
                 // nuke the yield and sneak a - in front of the label
                 program.pop();
                 program.push(format!("j -{}", label));
