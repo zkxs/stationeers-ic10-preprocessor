@@ -32,7 +32,7 @@ alias accumulator r0
 alias display d0
 start:
 add accumulator accumulator 1
-move display accumulator
+s display Setting accumulator
 yield
 j start
 ```
@@ -42,7 +42,7 @@ Output (5 lines):
 alias accumulator r0
 alias display d0
 add accumulator accumulator 1
-move display accumulator
+s display Setting accumulator
 j -2
 ```
 
