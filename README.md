@@ -46,6 +46,10 @@ move display accumulator
 j -2
 ```
 
+## Prebuilt Binary
+
+A prebuilt Windows binary is provided [here](https://github.com/zkxs/stationeers-ic10-preprocessor/releases/latest/download/stationeers-ic10-preprocessor.exe).
+
 ## Building
 
 Build with `cargo build --release`
